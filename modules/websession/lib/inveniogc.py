@@ -91,6 +91,8 @@ CFG_MAX_ATIME_RM_WEBSUBMIT_CKEDITOR_FILE = 28
 CFG_MAX_ATIME_BIBEDIT_TMP = 3
 # After how many days to remove submitted XML files related to BibEdit
 CFG_MAX_ATIME_BIBEDIT_XML = 3
+# After how many days to remove obsolete temporary shared files related
+CFG_MAX_ATIME_SHARED_TMP = 7
 
 def gc_exec_command(command):
     """ Exec the command logging in appropriate way its output."""
@@ -202,6 +204,13 @@ def clean_tempfiles():
         ' -atime +%s -exec rm %s -f {} \;' \
             % (CFG_TMPSHAREDDIR + '/bibedit-cache/', CFG_MAX_ATIME_BIBEDIT_XML,
                vstr))
+
+    write_message("- deleting old tmp shared files")
+    gc_exec_command('find %s -name "cds_inspire_synchro_*"'
+        ' -atime +%s -exec rm %s -f {} \;' \
+            % (CFG_TMPSHAREDDIR, CFG_MAX_ATIME_SHARED_TMP,
+               vstr))
+
 
     write_message("""CLEANING OF TMP FILES FINISHED""")
 
